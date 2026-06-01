@@ -1,52 +1,67 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm py-3">
     <div class="container">
-      <router-link class="navbar-brand d-flex align-items-center" to="/">
-        <span class="fs-4 fw-bold text-primary">🚀 Dev<span class="text-white">Blog</span></span>
+      <router-link to="/" class="navbar-brand fw-bold fs-4 text-white" @click="closeMenu">
+        🚀 My Blog
       </router-link>
 
       <button 
-        class="navbar-toggler" 
+        class="navbar-toggler border-0 shadow-none" 
         type="button" 
-        data-bs-toggle="collapse" 
-        data-bs-target="#navbarNav" 
-        aria-controls="navbarNav" 
-        aria-expanded="false" 
+        @click="toggleMenu"
         aria-label="Toggle navigation"
       >
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto align-items-center">
+      <div :class="['collapse navbar-collapse', { show: isMenuOpen }]">
+        <ul class="navbar-nav ms-auto align-items-center gap-2 mt-3 mt-lg-0">
+          
           <li class="nav-item">
-            <router-link class="nav-link px-3" to="/">Home</router-link>
+            <router-link to="/" class="nav-link px-3" @click="closeMenu">
+              Home
+            </router-link>
           </li>
 
           <template v-if="userStore.isAuthenticated">
             <li class="nav-item">
-              <router-link class="nav-link px-3" to="/posts/create">Write Post</router-link>
+              <span class="nav-link text-warning px-3 small fw-semibold">
+                👤 {{ userStore.user?.username || 'User' }} {{ userStore.isAdmin ? '(Admin)' : '' }}
+              </span>
             </li>
-            <li class="nav-item">
-              <router-link class="nav-link px-3" to="/profile">My Profile</router-link>
-            </li>
-            <li class="nav-item ms-lg-2">
-              <button @click="handleLogout" class="btn btn-outline-danger btn-sm px-3 rounded-pill">
+            
+            <li class="nav-item w-100 w-lg-auto text-center">
+              <button 
+                @click="handleLogout" 
+                class="btn btn-outline-danger btn-sm rounded-pill px-4 fw-semibold mt-2 mt-lg-0"
+              >
                 Logout
               </button>
             </li>
           </template>
 
           <template v-else>
-            <li class="nav-item">
-              <router-link class="nav-link px-3" to="/login">Login</router-link>
+            <li class="nav-item w-100 w-lg-auto text-center">
+              <router-link 
+                to="/login" 
+                class="nav-link px-3" 
+                @click="closeMenu"
+              >
+                Login
+              </router-link>
             </li>
-            <li class="nav-item ms-lg-2">
-              <router-link class="btn btn-primary btn-sm px-3 text-white rounded-pill" to="/register">
+            
+            <li class="nav-item w-100 w-lg-auto text-center">
+              <router-link 
+                to="/register" 
+                class="btn btn-primary btn-sm rounded-pill px-4 fw-semibold mt-2 mt-lg-0" 
+                @click="closeMenu"
+              >
                 Register
               </router-link>
             </li>
           </template>
+
         </ul>
       </div>
     </div>
@@ -54,16 +69,47 @@
 </template>
 
 <script setup>
-import { useUserStore } from '../stores/userStore';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useUserStore } from '../stores/userStore';
 import { toast } from 'vue3-toastify';
 
-const userStore = useUserStore();
 const router = useRouter();
+const userStore = useUserStore();
 
+// 🛠️ Mobile Menu Visibility State Controller
+const isMenuOpen = ref(false);
+
+// Flips the layout state back and forth (Open / Closed)
+const toggleMenu = () => {
+  isMenuOpen.value = !isMenuOpen.value;
+};
+
+// Explicitly forces the dropdown window to shut
+const closeMenu = () => {
+  isMenuOpen.value = false;
+};
+
+// Handles killing the current authentication session safely
 const handleLogout = () => {
-  userStore.clearAuth();
-  toast.info('Logged out successfully');
-  router.push('/login');
+  closeMenu(); // Snaps the mobile window shut
+  userStore.clearAuth(); // Wipes local storage & stores
+  toast.success('Logged out successfully.');
+  router.push('/login'); // Redirects to the login screening room
 };
 </script>
+
+<style scoped>
+/* Smooth sliding transitions when clicking the mobile menu toggle */
+.collapse {
+  transition: all 0.3s ease-in-out;
+}
+
+@media (max-width: 991.98px) {
+  .navbar-nav {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
+</style>
