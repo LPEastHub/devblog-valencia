@@ -24,13 +24,26 @@
           </li>
 
           <template v-if="userStore.isAuthenticated">
+            
             <li class="nav-item">
-              <span class="nav-link text-warning px-3 small fw-semibold">
+              <router-link to="/add-post" class="nav-link px-3" @click="closeMenu">
+                Write Post
+              </router-link>
+            </li>
+
+            <li class="nav-item">
+              <router-link to="/profile" class="nav-link px-3" @click="closeMenu">
+                My Profile
+              </router-link>
+            </li>
+
+            <li class="nav-item d-none d-lg-block">
+              <span class="nav-link text-warning px-3 small fw-semibold cursor-default">
                 👤 {{ userStore.user?.username || 'User' }} {{ userStore.isAdmin ? '(Admin)' : '' }}
               </span>
             </li>
             
-            <li class="nav-item w-100 w-lg-auto text-center">
+            <li class="nav-item w-100 w-lg-auto text-center ms-lg-2">
               <button 
                 @click="handleLogout" 
                 class="btn btn-outline-danger btn-sm rounded-pill px-4 fw-semibold mt-2 mt-lg-0"
@@ -95,7 +108,7 @@ const handleLogout = () => {
   closeMenu(); // Snaps the mobile window shut
   userStore.clearAuth(); // Wipes local storage & stores
   toast.success('Logged out successfully.');
-  router.push('/login'); // Redirects to the login screening room
+  router.push('/login'); // Redirects to the login page
 };
 </script>
 
@@ -103,6 +116,11 @@ const handleLogout = () => {
 /* Smooth sliding transitions when clicking the mobile menu toggle */
 .collapse {
   transition: all 0.3s ease-in-out;
+}
+
+/* Make the username text feel like a label instead of a clickable link */
+.cursor-default {
+  cursor: default;
 }
 
 @media (max-width: 991.98px) {
