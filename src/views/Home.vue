@@ -45,7 +45,7 @@
           </div>
           
           <div class="card-footer bg-transparent border-top-0 text-muted small pb-3">
-            Published on {{ formatDate(post.createdAt || new Date()) }}
+            Published on {{ formatDate(post.creationDate || new Date()) }}
           </div>
         </div>
       </div>

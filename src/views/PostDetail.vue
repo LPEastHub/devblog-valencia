@@ -20,7 +20,7 @@
             <div>
               <h1 class="fw-bold text-dark mb-2">{{ post.title }}</h1>
               <p class="text-muted small mb-0">
-                Published on {{ formatDate(post.createdAt || new Date()) }} by <strong>{{ post.author?.username || 'Unknown Author' }}</strong>
+                Published on {{ formatDate(post.creationDate || new Date()) }} by <strong>{{ post.author?.username || 'Unknown Author' }}</strong>
               </p>
             </div>
             
