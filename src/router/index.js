@@ -45,6 +45,13 @@ const routes = [
         component: () => import('../views/EditPost.vue'),
         meta: { requiresAuth: true }
     },
+    // 📢 NEW ADDITION: Dashboard route for an author's specific posts
+    {
+        path: '/my-posts',
+        name: 'MyPosts',
+        component: () => import('../views/MyPosts.vue'),
+        meta: { requiresAuth: true } // Keeps guests out of private dashboards
+    },
     
     // ↩️ CATCH-ALL FALLBACK ROUTE: Redirects broken URLs safely back to the Home feed
     { 

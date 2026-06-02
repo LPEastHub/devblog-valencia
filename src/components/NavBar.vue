@@ -26,8 +26,8 @@
           <template v-if="userStore.isAuthenticated">
             
             <li class="nav-item">
-              <router-link to="/add-post" class="nav-link px-3" @click="closeMenu">
-                Write Post
+              <router-link to="/my-posts" class="nav-link px-3" @click="closeMenu">
+                My Post
               </router-link>
             </li>
 
